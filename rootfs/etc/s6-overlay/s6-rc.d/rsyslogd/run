@@ -1,0 +1,10 @@
+#!/bin/sh
+
+if [ ! -f "rsyslog.pid" ]; then
+  touch rsyslog.pid
+  /usr/sbin/rsyslogd -n
+else
+  echo "Rsyslogd crashed, halting..."
+  rm -rf rsyslog.pid
+  /run/s6/basedir/bin/halt
+fi

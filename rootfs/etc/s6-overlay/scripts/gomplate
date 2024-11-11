@@ -1,0 +1,22 @@
+#!/bin/sh
+
+# copy signingtable file
+if test ! -z "$OPENDKIM_SIGNINGTABLE" && test -f "$OPENDKIM_SIGNINGTABLE"; then
+  gomplate < "$OPENDKIM_SIGNINGTABLE" > /etc/dkim/signingtable
+  chown opendkim:opendkim /etc/dkim/signingtable
+  chmod 600 /etc/dkim/signingtable
+fi
+
+# copy keytable file
+if test ! -z "$OPENDKIM_KEYTABLE" && test -f "$OPENDKIM_KEYTABLE"; then
+  gomplate < "$OPENDKIM_KEYTABLE" > /etc/dkim/keytable
+  chown opendkim:opendkim /etc/dkim/keytable
+  chmod 600 /etc/dkim/keytable
+fi
+
+# copy signing keys and change rights
+if test ! -z "$OPENDKIM_KEYS" && test -d "$OPENDKIM_KEYS"; then
+  cp -Lr $OPENDKIM_KEYS/* /etc/postfix/dkim
+  chown -R opendkim:opendkim /etc/postfix/dkim/
+  chmod -R 750 /etc/postfix/dkim/
+fi
